@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 execute 'add influxdata packages repository' do
   command '
 wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -
 source /etc/os-release
 echo "deb https://repos.influxdata.com/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
   '
+  if_not 'test -e /etc/apt/sources.list.d/influxdb.list'
 end
 
 execute 'update apt packages' do
