@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+include_recipe '../wget'
+
 execute 'download grafana.deb package' do
   command 'wget https://dl.grafana.com/oss/release/grafana-rpi_6.7.0_armhf.deb'
 end
