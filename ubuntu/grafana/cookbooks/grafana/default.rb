@@ -3,7 +3,7 @@
 execute 'wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -'
 execute 'wget -qO- https://packages.grafana.com/gpg.key | apt-key add -'
 
-execute 'echo "deb https://repos.influxdata.com/${"$(lsb_release -si)",,} $(lsb_release -sc) stable" > /etc/apt/sources.list.d/influxdb.list'
+execute 'echo "deb https://repos.influxdata.com/$(lsb_release -si | tr \'[:upper:]\' \'[:lower:]\') $(lsb_release -sc) stable" > /etc/apt/sources.list.d/influxdb.list'
 execute 'add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"'
 
 execute 'apt update -y'
