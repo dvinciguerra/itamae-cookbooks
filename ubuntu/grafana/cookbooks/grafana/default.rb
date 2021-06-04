@@ -1,9 +1,9 @@
 
 # configure repositories
-execute 'wget -qO- https://repos.influxdata.com/influxdb.key | gpg --dearmor > /etc/apt/trusted.gpg.d/influxdb.gpg'
+execute 'wget -qO- https://repos.influxdata.com/influxdb.key | sudo gpg --dearmor > /etc/apt/trusted.gpg.d/influxdb.gpg'
 execute 'wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -'
 
-execute 'DISTRIB_ID="$(lsb_release -si)" DISTRIB_CODENAME="$(lsb_release -sc)" echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdb.gpg] https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" > /etc/apt/sources.list.d/influxdb.list'
+execute 'DISTRIB_ID="$(lsb_release -si)" DISTRIB_CODENAME="$(lsb_release -sc)" sudo echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdb.gpg] https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" > /etc/apt/sources.list.d/influxdb.list'
 execute 'sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"'
 
 execute 'sudo apt update -y'
