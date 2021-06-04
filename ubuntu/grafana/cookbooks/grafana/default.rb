@@ -1,28 +1,33 @@
 
+system_name = `lsb_release -si | tr \'[:upper:]\' \'[:lower:]\'`
+system_version = "bionic"
+
 # configure repositories
 execute 'wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -'
 execute 'wget -qO- https://packages.grafana.com/gpg.key | apt-key add -'
 
-execute 'echo "deb https://repos.influxdata.com/$(lsb_release -si | tr \'[:upper:]\' \'[:lower:]\') $(lsb_release -sc) stable" > /etc/apt/sources.list.d/influxdb.list'
-execute 'add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"'
+execute "echo \"deb https://repos.influxdata.com/#{system_name} #{system_version} stable\" > /etc/apt/sources.list.d/influxdb.list"
+execute 'add-apt-repository "deb https://packages.grafana.com/oss/deb stable main" -y'
 
 execute 'apt update -y'
 
 # install telegraf
 execute 'apt install telegraf -y'
-execute 'systemctl enable --now telegraf'
-execute 'systemctl start telegraf'
+service 'telegraf' do
+  action [ :enable, :start ]
+end
 
 # install influxdb
 execute 'apt install influxdb -y'
-execute 'systemctl enable --now influxdb'
-execute 'systemctl start influxdb'
+service 'influxdb' do
+  action [ :enable, :start ]
+end
 
 # install grafana
 execute 'apt install grafana -y'
-execute 'systemctl daemon-reload'
-execute 'systemctl enable --now grafana-server'
-execute 'systemctl start grafana-server'
+service 'grafana-server' do
+  action [ :enable, :start ]
+end
 
 
 # configure influxdb
