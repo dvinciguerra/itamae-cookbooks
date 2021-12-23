@@ -1,0 +1,23 @@
+---
+user: mr_admin
+host: dns.example.local
+hostname: dns-server
+properties:
+  tags:
+    - dns-server
+    - server
+network:
+  gateway: 192.168.0.1
+  dns: 192.168.0.000
+telegraf:
+  host: localhost
+  database: telegraf
+  username: telegraf
+  password: change_me_123
+dhcpcd:
+  static: 192.168.0.000
+  router: 192.168.0.1
+  dns:
+    - 192.168.0.000
+    - 1.1.1.1
+    - 8.8.8.8
