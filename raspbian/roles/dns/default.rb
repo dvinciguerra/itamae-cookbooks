@@ -1,22 +1,28 @@
-dns = node['dns']
+# frozen_string_literal: true
 
-include_recipe '../cookbooks/setup'
-include_recipe '../cookbooks/unbound'
-include_recipe '../cookbooks/telegraf'
+include_recipe "../../cookbooks/lang"
+include_recipe "../../cookbooks/dnsmasq"
+include_recipe "../../cookbooks/hosts"
 
-execute "setting hostname #{dns['hostname']}" do
-  command "hostnamectl set-hostname #{dns['hostname']}"
-  not_if "test $(hostname) = #{dns['hostname']}"
+# prepare dnsmasq to be local name server
+file "/etc/dnsmasq.conf" do
+  action :edit
+  user "root"
+  block do |content|
+    content.gsub!("#bogus-priv", "bogus-priv")
+    content.gsub!("#domain-needed", "domain-needed")
+    content << <<~CONFIG
+      server=1.1.1.1
+      server=8.8.8.8
+
+      cache-size=1000
+    CONFIG
+  end
+  not_if 'test "$(cat /etc/dnsmasq.conf | grep \'server=1.1.1.1\')"'
 end
 
-template '/etc/dhcpcd.conf' do
-  source './dhcpcd.conf.erb'
-  variables(node: node)
-end
-
-execute 'Add my host to /etc/hosts' do
-  not_if "grep #{node['hostname']} /etc/hosts"
-  user 'root'
-  command "echo 127.0.1.1 #{node['hostname']} >> /etc/hosts"
+# restart dnsmasq
+service 'dnsmasq' do
+  action [:restart]
 end
 
