@@ -23,6 +23,8 @@ if node[:hosts].any?
   pp node[:hosts]
   template "/etc/hosts" do
     action :create
+    owner 'root'
+    mode '0644'
     source "./templates/hosts.erb"
   end
 end
