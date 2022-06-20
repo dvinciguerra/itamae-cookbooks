@@ -10,7 +10,7 @@ end
 # defaults
 node.reverse_merge!(
   hostname: "raspberrypi",
-  hosts: {}
+  hosts: []
 )
 
 # setting hostname

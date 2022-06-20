@@ -6,6 +6,6 @@ ff02::2      ip6-allrouters
 127.0.1.1    <%= node.fetch(:hostname, "raspberrypi") %>
 
 # network hosts [last updated at <%= Time.now.utc %>]
-<% node[:hosts].each do |(ip, domain)| %>
-<%= ip %>  <%= domain %>
+<% node[:hosts].each do |config| %>
+<%= config[:addr] %>  <%= config[:host] %>
 <% end %>
